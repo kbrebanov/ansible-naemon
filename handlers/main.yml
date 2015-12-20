@@ -1,2 +1,10 @@
 ---
 # handlers file for naemon
+
+- name: restart naemon
+  service: name={{ naemon_service_name }} state=restarted
+  tags: naemon
+
+- name: reload naemon
+  service: name={{ naemon_service_name }} state=reloaded
+  tags: naemon

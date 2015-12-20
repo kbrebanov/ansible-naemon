@@ -1,0 +1,20 @@
+---
+# tasks file for naemon (Ubuntu specific)
+
+- name: Add Consol Labs repository key
+  apt_key: >
+    keyserver=keys.gnupg.net
+    id=F8C1CA08A57B9ED7
+    state=present
+  tags: neamon
+
+- name: Add Consol Labs repository
+  apt_repository: >
+    repo='deb http://labs.consol.de/repo/testing/ubuntu trusty main'
+    state=present
+  tags: naemon
+
+- name: Install naemon packages
+  apt: name={{ item }} state=present update_cache=yes
+  with_items: naemon_packages
+  tags: naemon

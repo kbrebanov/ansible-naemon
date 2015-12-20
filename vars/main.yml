@@ -1,2 +1,6 @@
 ---
 # vars file for naemon
+
+naemon_service_name: naemon
+naemon_user: naemon
+naemon_group: naemon

@@ -1,2 +1,52 @@
 ---
 # tasks file for naemon
+
+- name: Include distribution specific variables
+  include_vars: "{{ ansible_distribution }}.yml"
+  tags: naemon
+
+- include: CentOS.yml
+  when: ansible_distribution == "CentOS"
+  tags: naemon
+
+- include: Ubuntu.yml
+  when: ansible_distribution == "Ubuntu"
+  tags: naemon
+
+- name: Create Naemon resource configuration file
+  template: >
+    src=resource.cfg.j2
+    dest=/etc/naemon/resource.cfg
+    owner={{ naemon_user }}
+    group={{ naemon_group }}
+    mode=0640
+  notify: restart naemon
+  tags: naemon
+
+- name: Create Naemon main configuration file
+  template: >
+    src=naemon.cfg.j2
+    dest=/etc/naemon/naemon.cfg
+    owner={{ naemon_user }}
+    group={{ naemon_group }}
+    mode=0644
+  notify: restart naemon
+  tags: neamon
+
+- name: Create Naemon template configuration files
+  template: >
+    src=conf.d/templates/{{ item }}.cfg.j2
+    dest=/etc/naemon/conf.d/templates/{{ item }}.cfg
+    owner={{ naemon_user }}
+    group={{ naemon_group }}
+    mode=0644
+  notify: reload naemon
+  with_items:
+    - contacts
+    - hosts
+    - services
+  tags: naemon
+
+- name: Ensure Naemon service is started and enabled on boot
+  service: name={{ naemon_service_name }} state=started enabled=yes
+  tags: naemon

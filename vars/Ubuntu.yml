@@ -1,0 +1,8 @@
+---
+# vars file for naemon (Ubuntu specific)
+
+naemon_packages:
+  - naemon={{ naemon_version }}*
+  - nagios-plugins
+naemon_plugins_path: /usr/lib/naemon/plugins
+naemon_eventhandlers_path: /usr/lib/naemon/plugins/eventhandlers
