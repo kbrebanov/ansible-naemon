@@ -1,0 +1,10 @@
+# {{ ansible_managed }}
+
+{% for hostgroup in naemon_hostgroups %}
+define hostgroup {
+{% for key, value in hostgroup.iteritems() %}
+    {{ key }} {{ value }}
+{% endfor %}
+}
+
+{% endfor %}

@@ -1,0 +1,11 @@
+# {{ ansible_managed }}
+
+{% for contact in naemon_template_contacts %}
+define contact {
+    register 0
+{% for key, value in contact.iteritems() %}
+    {{ key }} {{ value }}
+{% endfor %}
+}
+
+{% endfor %}

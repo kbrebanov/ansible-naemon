@@ -1,0 +1,11 @@
+# {{ ansible_managed }}
+
+{% for host in naemon_template_hosts %}
+define host {
+    register 0
+{% for key, value in host.iteritems() %}
+    {{ key }} {{ value }}
+{% endfor %}
+}
+
+{% endfor %}

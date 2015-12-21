@@ -1,0 +1,10 @@
+# {{ ansible_managed }}
+
+{% for serviceescalation in naemon_serviceescalations %}
+define serviceescalation {
+{% for key, value in serviceescalation.iteritems() %}
+    {{ key }} {{ value }}
+{% endfor %}
+}
+
+{% endfor %}

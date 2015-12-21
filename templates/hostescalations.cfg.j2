@@ -1,0 +1,10 @@
+# {{ ansible_managed }}
+
+{% for hostescalation in naemon_hostescalations %}
+define hostescalation {
+{% for key, value in hostescalation.iteritems() %}
+    {{ key }} {{ value }}
+{% endfor %}
+}
+
+{% endfor %}

@@ -13,6 +13,17 @@
   when: ansible_distribution == "Ubuntu"
   tags: naemon
 
+- name: Remove default Naemon configurations
+  file: >
+    path=/etc/naemon/conf.d/{{ item }}.cfg
+    state=absent
+  with_items:
+    - localhost
+    - printer
+    - switch
+    - windows
+  tags: naemon
+
 - name: Create Naemon resource configuration file
   template: >
     src=resource.cfg.j2
@@ -33,9 +44,9 @@
   notify: restart naemon
   tags: neamon
 
-- name: Create Naemon template configuration files
+- name: Create Naemon object configuration templates
   template: >
-    src=conf.d/templates/{{ item }}.cfg.j2
+    src=templates/{{ item }}.cfg.j2
     dest=/etc/naemon/conf.d/templates/{{ item }}.cfg
     owner={{ naemon_user }}
     group={{ naemon_group }}
@@ -43,8 +54,31 @@
   notify: reload naemon
   with_items:
     - contacts
-    - hosts
     - services
+    - hosts
+  tags: naemon
+
+- name: Create Naemon object configurations
+  template: >
+    src={{ item }}.cfg.j2
+    dest=/etc/naemon/conf.d/{{ item }}.cfg
+    owner={{ naemon_user }}
+    group={{ naemon_group }}
+    mode=0664
+  with_items:
+    - commands
+    - timeperiods
+    - contactgroups
+    - contacts
+    - servicegroups
+    - services
+    - servicedependencies
+    - serviceescalations
+    - hostgroups
+    - hosts
+    - hostdependencies
+    - hostescalations
+  notify: reload naemon
   tags: naemon
 
 - name: Ensure Naemon service is started and enabled on boot

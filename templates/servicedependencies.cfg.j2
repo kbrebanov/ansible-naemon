@@ -1,0 +1,10 @@
+# {{ ansible_managed }}
+
+{% for servicedependency in naemon_servicedependencies %}
+define servicedependency {
+{% for key, value in servicedependency.iteritems() %}
+    {{ key }} {{ value }}
+{% endfor %}
+}
+
+{% endfor %}

@@ -1,0 +1,10 @@
+# {{ ansible_managed }}
+
+{% for hostdepencendy in naemon_hostdependencies %}
+define hostdepencendy {
+{% for key, value in hostdepencendy.iteritems() %}
+    {{ key }} {{ value }}
+{% endfor %}
+}
+
+{% endfor %}

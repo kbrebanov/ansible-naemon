@@ -1,0 +1,11 @@
+# {{ ansible_managed }}
+
+{% for service in naemon_template_services %}
+define service {
+    register 0
+{% for key, value in service.iteritems() %}
+    {{ key }} {{ value }}
+{% endfor %}
+}
+
+{% endfor %}

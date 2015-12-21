@@ -1,0 +1,10 @@
+# {{ ansible_managed }}
+
+{% for timeperiod in naemon_timeperiods %}
+define timeperiod {
+{% for key, value in timeperiod.iteritems() %}
+    {{ key }} {{ value }}
+{% endfor %}
+}
+
+{% endfor %}

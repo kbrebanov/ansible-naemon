@@ -1,0 +1,10 @@
+# {{ ansible_managed }}
+
+{% for contactgroup in naemon_contactgroups %}
+define contactgroup {
+{% for key, value in contactgroup.iteritems() %}
+    {{ key }} {{ value }}
+{% endfor %}
+}
+
+{% endfor %}

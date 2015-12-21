@@ -1,0 +1,10 @@
+# {{ ansible_managed }}
+
+{% for servicegroup in naemon_servicegroups %}
+define servicegroup {
+{% for key, value in servicegroup.iteritems() %}
+    {{ key }} {{ value }}
+{% endfor %}
+}
+
+{% endfor %}

@@ -1,0 +1,10 @@
+# {{ ansible_managed }}
+
+{% for command in naemon_commands %}
+define command {
+{% for key, value in command.iteritems() %}
+    {{ key }} {{ value }}
+{% endfor %}
+}
+
+{% endfor %}

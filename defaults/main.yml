@@ -2,3 +2,172 @@
 # defaults file for naemon
 
 naemon_version: 1.0.4
+
+naemon_template_contacts:
+  - name: generic-contact
+    host_notification_commands: notify-host-by-email
+    host_notification_options: d,u,r,f,s
+    host_notification_period: 24x7
+    service_notification_commands: notify-service-by-email
+    service_notification_options: w,u,c,r,f,s
+    service_notification_period: 24x7
+
+naemon_template_hosts:
+  - name: generic-host
+    event_handler_enabled: 1
+    flap_detection_enabled: 1
+    notification_period: 24x7
+    notifications_enabled: 1
+    process_perf_data: 1
+    retain_nonstatus_information: 1
+    retain_status_information: 1
+    max_check_attempts: 3
+    check_period: 24x7
+    contact_groups: admins
+    notification_interval: 60
+
+naemon_template_services:
+  - name: generic-service
+    service_description: generic-service
+    active_checks_enabled: 1
+    check_freshness: 0
+    check_interval: 10
+    check_period: 24x7
+    contact_groups: admins
+    event_handler_enabled: 1
+    flap_detection_enabled: 1
+    is_volatile: 0
+    max_check_attempts: 3
+    notification_interval: 60
+    notification_options: w,u,c,r
+    notification_period: 24x7
+    notifications_enabled: 1
+    obsess_over_service: 1
+    passive_checks_enabled: 1
+    process_perf_data: 1
+    retain_nonstatus_information: 1
+    retain_status_information: 1
+    retry_interval: 2
+
+naemon_timeperiods:
+  - timeperiod_name: 24x7
+    alias: 24 Hours A Day, 7 Days A Week
+    monday: "00:00-24:00"
+    tuesday: "00:00-24:00"
+    wednesday: "00:00-24:00"
+    thursday: "00:00-24:00"
+    friday: "00:00-24:00"
+    saturday: "00:00-24:00"
+    sunday: "00:00-24:00"
+  - timeperiod_name: workhours
+    alias: Normal Work Hours
+    monday: "09:00-17:00"
+    tuesday: "09:00-17:00"
+    wednesday: "09:00-17:00"
+    thursday: "09:00-17:00"
+    friday: "09:00-17:00"
+  - timeperiod_name: none
+    alias: No Time Is A Good Time
+  - timeperiod_name: us-holidays
+    alias: U.S. Holidays
+    "december 25": "00:00-00:00"
+    "january 1": "00:00-00:00"
+    "july 4": "00:00-00:00"
+    "monday -1 may": "00:00-00:00"
+    "monday 1 september": "00:00-00:00"
+    "thursday 4 november": "00:00-00:00"
+  - timeperiod_name: 24x7-sans-holidays
+    alias: 24x7 Sans Holidays
+    monday: "00:00-24:00"
+    tuesday: "00:00-24:00"
+    wednesday: "00:00-24:00"
+    thursday: "00:00-24:00"
+    friday: "00:00-24:00"
+    saturday: "00:00-24:00"
+    sunday: "00:00-24:00"
+    exclude: us-holidays
+
+naemon_commands:
+  - command_name: notify-host-by-email
+    command_line: '/usr/bin/printf "%b" "***** Naemon *****\n\nNotification Type: $NOTIFICATIONTYPE$\nHost: $HOSTNAME$\nState: $HOSTSTATE$\nAddress: $HOSTADDRESS$\nInfo: $HOSTOUTPUT$\n\nDate/Time: $LONGDATETIME$\n" | /usr/bin/mail -s "** $NOTIFICATIONTYPE$ Host Alert: $HOSTNAME$ is $HOSTSTATE$ **" $CONTACTEMAIL$'
+  - command_name: notify-service-by-email
+    command_line: '/usr/bin/printf "%b" "***** Naemon *****\n\nNotification Type: $NOTIFICATIONTYPE$\n\nService: $SERVICEDESC$\nHost: $HOSTALIAS$\nAddress: $HOSTADDRESS$\nState: $SERVICESTATE$\n\nDate/Time: $LONGDATETIME$\n\nAdditional Info:\n\n$SERVICEOUTPUT$\n" | /usr/bin/mail -s "** $NOTIFICATIONTYPE$ Service Alert: $HOSTALIAS$/$SERVICEDESC$ is $SERVICESTATE$ **" $CONTACTEMAIL$'
+  - command_name: check-host-alive
+    command_line: $USER1$/check_ping -H $HOSTADDRESS$ -w 3000.0,80% -c 5000.0,100% -p 5
+  - command_name: check-local-disk
+    command_line: $USER1$/check_disk -w $ARG1$ -c $ARG2$ -p $ARG3$
+  - command_name: check-local-load
+    command_line: $USER1$/check_load -w $ARG1$ -c $ARG2$
+  - command_name: check-local-procs
+    command_line: $USER1$/check_procs -w $ARG1$ -c $ARG2$ -s $ARG3$
+  - command_name: check-local-users
+    command_line: $USER1$/check_users -w $ARG1$ -c $ARG2$
+  - command_name: check-local-swap
+    command_line: $USER1$/check_swap -w $ARG1$ -c $ARG2$
+  - command_name: check-local-mrtgtraf
+    command_line: $USER1$/check_mrtgtraf -F $ARG1$ -a $ARG2$ -w $ARG3$ -c $ARG4$ -e $ARG5$
+  - command_name: check-ftp
+    command_line: $USER1$/check_ftp -H $HOSTADDRESS$ $ARG1$
+  - command_name: check-hpjd
+    command_line: $USER1$/check_hpjd -H $HOSTADDRESS$ $ARG1$
+  - command_name: check-snmp
+    command_line: $USER1$/check_snmp -H $HOSTADDRESS$ $ARG1$
+  - command_name: check-http
+    command_line: $USER1$/check_http -I $HOSTADDRESS$ $ARG1$
+  - command_name: check-ssh
+    command_line: $USER1$/check_ssh $ARG1$ $HOSTADDRESS$
+  - command_name: check-dhcp
+    command_line: $USER1$/check_dhcp $ARG1$
+  - command_name: check-ping
+    command_line: $USER1$/check_ping -H $HOSTADDRESS$ -w $ARG1$ -c $ARG2$ -p 5
+  - command_name: check-pop
+    command_line: $USER1$/check_pop -H $HOSTADDRESS$ $ARG1$
+  - command_name: check-imap
+    command_line: $USER1$/check_imap -H $HOSTADDRESS$ $ARG1$
+  - command_name: check-smtp
+    command_line: $USER1$/check_smtp -H $HOSTADDRESS$ $ARG1$
+  - command_name: check-tcp
+    command_line: $USER1$/check_tcp -H $HOSTADDRESS$ -p $ARG1$ $ARG2$
+  - command_name: check-udp
+    command_line: $USER1$/check_udp -H $HOSTADDRESS$ -p $ARG1$ $ARG2$
+  - command_name: check-nt
+    command_line: $USER1$/check_nt -H $HOSTADDRESS$ -p 12489 -v $ARG1$ $ARG2$
+  - command_name: process-host-perfdata
+    command_line: '/usr/bin/printf "%b" "$LASTHOSTCHECK$\t$HOSTNAME$\t$HOSTSTATE$\t$HOSTATTEMPT$\t$HOSTSTATETYPE$\t$HOSTEXECUTIONTIME$\t$HOSTOUTPUT$\t$HOSTPERFDATA$\n" >> /var/lib/naemon/host-perfdata.out'
+  - command_name: process-service-perfdata
+    command_line: '/usr/bin/printf "%b" "$LASTSERVICECHECK$\t$HOSTNAME$\t$SERVICEDESC$\t$SERVICESTATE$\t$SERVICEATTEMPT$\t$SERVICESTATETYPE$\t$SERVICEEXECUTIONTIME$\t$SERVICELATENCY$\t$SERVICEOUTPUT$\t$SERVICEPERFDATA$\n" >> /var/lib/naemon/service-perfdata.out'
+
+naemon_contactgroups:
+  - contactgroup_name: admins
+    alias: Naemon Administrators
+    members: naemonadmin
+
+naemon_contacts:
+  - contact_name: naemonadmin
+    alias: Naemon Admin
+    email: naemon@localhost
+    use: generic-contact
+
+naemon_hosts:
+  - use: generic-host
+    host_name: localhost
+    alias: localhost
+    address: 127.0.0.1
+
+naemon_hostdependencies: []
+
+naemon_hostescalations: []
+
+naemon_hostgroups: []
+
+naemon_services:
+  - use: generic-service
+    host_name: localhost
+    service_description: localhost-ping
+    check_command: check-ping
+
+naemon_servicedependencies: []
+
+naemon_serviceescalations: []
+
+naemon_servicegroups: []
