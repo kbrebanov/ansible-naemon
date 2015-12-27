@@ -4,3 +4,17 @@
 naemon_service_name: naemon
 naemon_user: naemon
 naemon_group: naemon
+naemon_log_file: /var/log/naemon/naemon.log
+naemon_cfg_dir: /etc/naemon/conf.d
+naemon_object_cache_file: /var/lib/naemon/objects.cache
+naemon_precached_object_file: /var/lib/naemon/objects.precache
+naemon_resource_file: /etc/naemon/resource.cfg
+naemon_status_file: /var/lib/naemon/status.dat
+naemon_command_file: /var/lib/naemon/naemon.cmd
+naemon_lock_file: /var/run/naemon/naemon.pid
+naemon_temp_file: /var/lib/naemon/naemon.tmp
+naemon_temp_path: /var/cache/naemon
+naemon_log_archive_path: /var/log/naemon/archives
+naemon_check_result_path: /var/cache/naemon/checkresults
+naemon_state_retention_file: /var/lib/naemon/retention.dat
+naemon_debug_file: /var/lib/naemon/naemon.debug
